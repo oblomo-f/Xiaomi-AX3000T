@@ -1,5 +1,10 @@
 #!/bin/sh
 
+[ -f /etc/openwrt_release ] || {
+    echo "Это не OpenWrt"
+    exit 1
+}
+
 # -------- Настройки --------
 # Ссылка на raw IPK из GitHub
 PACKAGE_URL="https://raw.githubusercontent.com/routerich/packages.routerich/24.10.4/routerich/luci-theme-routerich_1.0.9.10-r20251204_all.ipk"
@@ -40,3 +45,4 @@ else
 fi
 
 echo "Готово! Все пакеты установлены."
+
