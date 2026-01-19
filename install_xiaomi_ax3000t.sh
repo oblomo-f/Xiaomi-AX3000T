@@ -1,48 +1,54 @@
 #!/bin/sh
-
-# ===== Защита =====
 set -e
 
-# ===== Проверка OpenWrt =====
+echo "=== Проверка устройства ==="
+
+MODEL="$(cat /tmp/sysinfo/model 2>/dev/null || true)"
+
+case "$MODEL" in
+    *AX3000T*|*ax3000t*|*Xiaomi*AX3000T*)
+        echo "Обнаружено устройство: $MODEL"
+        ;;
+    *)
+        echo "Ошибка: это не Xiaomi AX3000T"
+        echo "Определено: $MODEL"
+        exit 1
+        ;;
+esac
+
+echo "=== Проверка OpenWrt ==="
 if [ ! -f /etc/openwrt_release ]; then
     echo "Ошибка: это не OpenWrt"
     exit 1
 fi
 
-echo "=== Установка начата ==="
+echo "=== Обновление opkg ==="
+opkg update
 
-# ===== Обновление opkg =====
-echo "Обновление списка пакетов..."
-if ! opkg update; then
-    echo "Ошибка: opkg update"
-    exit 1
-fi
+echo "=== Установка русского языка LuCI ==="
+opkg install luci-i18n-base-ru
 
-# ===== Установка русского языка LuCI =====
-echo "Установка luci-i18n-base-ru..."
-if ! opkg install luci-i18n-base-ru; then
-    echo "Ошибка установки luci-i18n-base-ru"
-    exit 1
-fi
-
-# ===== Установка темы routerich =====
+echo "=== Скачивание темы routerich ==="
 THEME_URL="https://raw.githubusercontent.com/routerich/packages.routerich/24.10.4/routerich/luci-theme-routerich_1.0.9.10-r20251204_all.ipk"
 THEME_IPK="/tmp/luci-theme-routerich.ipk"
 
-echo "Скачивание темы routerich..."
-if ! wget -O "$THEME_IPK" "$THEME_URL"; then
-    echo "Ошибка скачивания темы"
-    exit 1
-fi
+wget -O "$THEME_IPK" "$THEME_URL"
 
-echo "Установка темы routerich..."
-if ! opkg install "$THEME_IPK"; then
-    echo "Ошибка установки темы"
-    exit 1
-fi
-
-# ===== Очистка =====
+echo "=== Установка темы routerich ==="
+opkg install "$THEME_IPK"
 rm -f "$THEME_IPK"
 
-echo "=== Установка завершена успешно ==="
+echo "=== Переключение LuCI на русский язык ==="
+uci set luci.main.lang='ru'
+uci commit luci
 
+echo "=== Включение темы routerich ==="
+uci set luci.main.mediaurlbase='/luci-static/routerich'
+uci commit luci
+
+echo "=== Перезапуск uhttpd ==="
+/etc/init.d/uhttpd restart
+
+echo "=== Готово! ==="
+echo "LuCI переключён на русский язык"
+echo "Тема routerich активирована"
