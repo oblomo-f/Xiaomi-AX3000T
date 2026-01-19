@@ -1,24 +1,12 @@
 #!/bin/sh
 
 echo "=== Проверка OpenWrt ==="
-if [ ! -f /etc/openwrt_release ]; then
-    echo "Ошибка: это не OpenWrt"
-    exit 1
-fi
+[ -f /etc/openwrt_release ] || { echo "Это не OpenWrt"; exit 1; }
 
-echo "=== Проверка устройства ==="
+echo "=== Проверка модели ==="
 MODEL="$(cat /tmp/sysinfo/model 2>/dev/null)"
-
-case "$MODEL" in
-    *AX3000T*)
-        echo "Устройство: $MODEL"
-        ;;
-    *)
-        echo "Ошибка: это не Xiaomi AX3000T"
-        echo "Определено: $MODEL"
-        exit 1
-        ;;
-esac
+echo "$MODEL" | grep -qi "AX3000T" || { echo "Не Xiaomi AX3000T"; exit 1; }
+echo "Устройство: $MODEL"
 
 echo "=== Обновление opkg ==="
 opkg update || exit 1
@@ -28,11 +16,10 @@ opkg install luci-i18n-base-ru || exit 1
 
 echo "=== Установка темы routerich ==="
 THEME_URL="https://raw.githubusercontent.com/routerich/packages.routerich/24.10.4/routerich/luci-theme-routerich_1.0.9.10-r20251204_all.ipk"
-THEME_IPK="/tmp/luci-theme-routerich.ipk"
-
-wget -O "$THEME_IPK" "$THEME_URL" || exit 1
-opkg install "$THEME_IPK" || exit 1
-rm -f "$THEME_IPK"
+IPK="/tmp/routerich.ipk"
+wget -O "$IPK" "$THEME_URL" || exit 1
+opkg install "$IPK" || exit 1
+rm -f "$IPK"
 
 echo "=== Переключение LuCI на русский ==="
 uci set luci.main.lang='ru'
