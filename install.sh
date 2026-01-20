@@ -93,8 +93,8 @@ if opkg list | grep -q "^$THEME_PACKAGE "; then
     fi
 
     # Гарантированное применение темы
-    uci set luci.main.mediaurlbase="$THEME_PACKAGE"
-    uci set luci.main.rnd_theme="$THEME_PACKAGE"
+    uci set luci.main.mediaurlbase="Routerich"
+    uci set luci.main.rnd_theme="Routerich"
     uci commit luci
     rm -rf /tmp/luci-*
     /etc/init.d/uhttpd restart
