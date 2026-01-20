@@ -646,26 +646,6 @@ case $varByPass in
 	deleteByPassGeoBlockComssDNS
 	messageComplete="ByPass block for Method 1: AWG WARP + zapret + Opera Proxy...Configured completed..."
 	;;
-2)
-	nameFileReplacePodkop="podkopNew"
-	printf  "\033[32;1mStop and disabled service 'youtubeUnblock' and 'ruantiblock' and 'zapret'...\033[0m\n"
-	manage_package "youtubeUnblock" "disable" "stop"
-	manage_package "ruantiblock" "disable" "stop"
-	manage_package "zapret" "disable" "stop"
-	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 2: AWG WARP + Opera Proxy...Configured completed..."
-	;;
-3)
-	nameFileReplacePodkop="podkopNewSecond"
-	printf  "\033[32;1mStop and disabled service 'ruantiblock' and youtubeUnblock ...\033[0m\n"
-	manage_package "ruantiblock" "disable" "stop"
-	manage_package "youtubeUnblock" "disable" "stop"
-	wget -O "/opt/zapret/init.d/openwrt/custom.d/50-discord-media" "$URL/config_files/50-discord-media"
-	chmod +x "/opt/zapret/init.d/openwrt/custom.d/50-discord-media"
-	service zapret restart
-	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 3: zapret + Opera Proxy...Configured completed..."
-	;;
 4)
 	nameFileReplacePodkop="podkopNewSecondYoutube"
 	printf  "\033[32;1mStop and disabled service 'youtubeUnblock' and 'ruantiblock' and 'zapret'...\033[0m\n"
@@ -688,26 +668,6 @@ case $varByPass in
 	byPassGeoBlockComssDNS
 	printf "\033[32;1mByPass block for Method 5: zapret + ComssDNS for GeoBlock...Configured completed...\033[0m\n"
 	exit 1
-	;;
-6)
-	nameFileReplacePodkop="podkopNewWARP"
-	printf  "\033[32;1mStop and disabled service 'youtubeUnblock' and 'ruantiblock' and 'zapret'...\033[0m\n"
-	manage_package "youtubeUnblock" "disable" "stop"
-	manage_package "ruantiblock" "disable" "stop"
-	manage_package "zapret" "disable" "stop"
-	byPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 6: AWG WARP + ComssDNS for GeoBlock...Configured completed..."
-	;;
-7)
-	nameFileReplacePodkop="podkopNewWARPNoYoutube"
-	printf  "\033[32;1mStop and disabled service 'ruantiblock' and 'youtubeUnblock'...\033[0m\n"
-	manage_package "ruantiblock" "disable" "stop"
-	manage_package "youtubeUnblock" "disable" "stop"
-	wget -O "/opt/zapret/init.d/openwrt/custom.d/50-discord-media" "$URL/config_files/50-discord-media"
-	chmod +x "/opt/zapret/init.d/openwrt/custom.d/50-discord-media"
-	service zapret restart
-	byPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 7: AWG WARP + zapret + ComssDNS for GeoBlock...Configured completed..."
 	;;
 8)
 	printf "\033[32;1mTry custom settings router to bypass the locks... Recomendation buy 'VPS' and up 'vless'\033[0m\n"
