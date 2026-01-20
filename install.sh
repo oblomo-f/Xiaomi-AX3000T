@@ -137,12 +137,10 @@ for PKG in "ttyd" "luci-i18n-ttyd-ru" "luci-app-ttyd"; do
 done
 
 
-
-
 # -----------------------------
 # Перезапуск uHTTPd
 # -----------------------------
 echo "Перезапуск LuCI..."
 /etc/init.d/uhttpd restart
 
-echo "Готово! LuCI теперь на русском с темой $THEME_PACKAGE и File Manager установлен с русским интерфейсом."
+echo "Готово!."
