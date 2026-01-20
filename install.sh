@@ -120,11 +120,6 @@ for PKG in "$FILEMANAGER_PACKAGE" "$FILEMANAGER_LANG"; do
     fi
 done
 
-
-ttyd	1.7.3-r1	-	-	
-luci-app-ttyd	26.018.63408~11ffeb0	-	-	
-luci-i18n-ttyd-ru
-
 # -----------------------------
 # Установка Терминала
 # -----------------------------
@@ -140,29 +135,6 @@ for PKG in "ttyd" "luci-i18n-ttyd-ru" "luci-app-ttyd"; do
         echo "Пакет $PKG недоступен в текущих репозиториях. Пропуск."
     fi
 done
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
