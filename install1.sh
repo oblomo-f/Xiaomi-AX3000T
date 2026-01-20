@@ -674,7 +674,7 @@ case $varByPass in
 	exit 1
 	;;
 *)
-    echo "Unknown error. Please send message in group Telegram t.me/routerich"
+    echo "Unknown error."
 	exit 1
 esac
 
@@ -688,9 +688,6 @@ if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$REQUIRED_VERSION" 
 fi
 
 if [ -f "/etc/init.d/podkop" ]; then
-	#printf "Podkop installed. Reconfigured on AWG WARP and Opera Proxy? (y/n): \n"
-	#is_reconfig_podkop="y"
-	#read is_reconfig_podkop
 	if [ "$is_reconfig_podkop" = "y" ] || [ "$is_reconfig_podkop" = "Y" ]; then
 		cp -f "$path_podkop_config" "$path_podkop_config_backup"
 		wget -O "$path_podkop_config" "$URL/config_files/$nameFileReplacePodkop" 
@@ -698,10 +695,7 @@ if [ -f "/etc/init.d/podkop" ]; then
 		echo "Podkop reconfigured..."
 	fi
 else
-	#printf "\033[32;1mInstall and configure PODKOP (a tool for point routing of traffic)?? (y/n): \033[0m\n"
-	is_install_podkop="y"
-	#read is_install_podkop
-
+		is_install_podkop="y"
 	if [ "$is_install_podkop" = "y" ] || [ "$is_install_podkop" = "Y" ]; then
 		DOWNLOAD_DIR="/tmp/podkop"
 		mkdir -p "$DOWNLOAD_DIR"
