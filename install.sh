@@ -118,7 +118,7 @@ if opkg list | grep -q "^$THEME_PACKAGE "; then
 #    echo "Тема $THEME_PACKAGE успешно применена."
 #else
 #    echo "Тема $THEME_PACKAGE недоступна в текущих репозиториях. Установка пропущена."
-#fi
+fi
 
 # -----------------------------
 # Установка File Manager и русификация
