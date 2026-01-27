@@ -36,3 +36,5 @@ podkop ruleset add custom-domains \
 podkop rule add \
   --ruleset geoblock,block,meta,twitter,hdrezka,tiktok,googleai,custom-domains \
   --outbound http-proxy
+
+opkg install opera-proxy
