@@ -4,17 +4,17 @@
 <b>Скрипт для установки темы (Routerich), пакет File Manager, Терминала. Добавления Репозитория (Routerich)</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/oblomo-f/test/refs/heads/main/install.sh)<br>
 
-Установка DNS (https-dns-proxy, dnsmasq-full, stubby )</b>.<br>
+<b>Установка DNS (https-dns-proxy, dnsmasq-full, stubby )</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/oblomo-f/test/refs/heads/main/install_dns.sh)<br>
 
-Подкоп
+<b>Подкоп</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/itdoginfo/podkop/refs/heads/main/install.sh)<br>
 
-Правила подкоп
+<b>Правила подкоп</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/oblomo-f/test/refs/heads/main/install-podkop-rules.sh)<br>
 
-NQFWS
+<b>NQFWS</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/oblomo-f/test/refs/heads/main/install_nfqws_openwrt.sh)
 
-Роблокс
+<b>Роблокс</b>.<br>
 sh <(wget -O - https://raw.githubusercontent.com/oblomo-f/test/refs/heads/main/install_nfqws_roblox.sh)
