@@ -72,11 +72,3 @@ cat << 'EOF' > "$NFQWS_FILE"
 EOF
 
 echo "Файл $NFQWS_FILE создан"
-
-# Перезапуск nfqws
-if [ -x /etc/init.d/nfqws ]; then
-    /etc/init.d/nfqws restart
-    echo "nfqws перезапущен"
-else
-    echo "init-скрипт nfqws не найден"
-fi
