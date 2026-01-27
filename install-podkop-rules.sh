@@ -57,9 +57,13 @@ uci show podkop >/dev/null 2>&1 || {
 # Перезапуск сервиса
 if [ -x /etc/init.d/podkop ]; then
     /etc/init.d/podkop restart
-    echo "✅ podkop перезапущен"
+    printf "\033[32;1mpodkop перезапущен\033[0m\n"
+#    echo "✅ podkop перезапущен"
 else
-    echo "⚠️ Сервис podkop не найден"
+   # echo "⚠️ Сервис podkop не найден"
+     printf "\033[32;1mСервис podkop не найден\033[0m\n"
 fi
 
-echo "✅ Конфиг записан в $CONFIG_FILE"
+#echo "✅ Конфиг записан в $CONFIG_FILE"
+printf "\033[32;1mКонфиг записан в $CONFIG_FILE\033[0m\n"
+
