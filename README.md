@@ -2,7 +2,7 @@
 
 Готовые решения для установки DNS, Podkop, NQFWS и других утилит на роутеры с прошивкой OpenWrt.
 
-Ваш роутер Xiaomi AX3000T будет похож на  <a href="https://routerich.ru/products/ax3000" target="_blank">"Routerich"</a>
+Ваш роутер Xiaomi AX3000T будет похож на  <a href="https://routerich.ru/products/ax3000" target=_blank>"Routerich"</a>
 
 ## ⚠️ Важная информация
 
