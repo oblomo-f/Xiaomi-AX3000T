@@ -214,20 +214,20 @@ fi
 
 manage_package "podkop" "enable" "stop"
 
-curl -f -o /dev/null -k --connect-to ::google.com -L -H "Host: mirror.gcr.io" --max-time 120 https://test.googlevideo.com/v2/cimg/android/blobs/sha256:2ab09b027e7f3a0c2e8bb1944ac46de38cebab7145f0bd6effebfe5492c818b6
+#curl -f -o /dev/null -k --connect-to ::google.com -L -H "Host: mirror.gcr.io" --max-time 120 https://test.googlevideo.com/v2/cimg/android/blobs/sha256:2ab09b027e7f3a0c2e8bb1944ac46de38cebab7145f0bd6effebfe5492c818b6
 
 
-isWorkOperaProxy=0
-printf "\033[32;1mCheck opera proxy...\033[0m\n"
-service sing-box restart
-curl --proxy http://127.0.0.1:18080 ipinfo.io/ip
-if [ $? -eq 0 ]; then
-	printf "\n\033[32;1mOpera proxy well work...\033[0m\n"
-	isWorkOperaProxy=1
-else
-	printf "\033[32;1mOpera proxy not work...\033[0m\n"
-	isWorkOperaProxy=0
-fi
+#isWorkOperaProxy=0
+#printf "\033[32;1mCheck opera proxy...\033[0m\n"
+#service sing-box restart
+#curl --proxy http://127.0.0.1:18080 ipinfo.io/ip
+#if [ $? -eq 0 ]; then
+#  printf "\n\033[32;1mOpera proxy well work...\033[0m\n"
+#   isWorkOperaProxy=1
+#else
+#	printf "\033[32;1mOpera proxy not work...\033[0m\n"
+#	isWorkOperaProxy=0
+#fi
 
 
 printf  "\033[32;1mRestart service dnsmasq, odhcpd...\033[0m\n"
