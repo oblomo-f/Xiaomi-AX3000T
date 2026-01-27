@@ -111,6 +111,11 @@ for PKG in "ttyd" "luci-i18n-ttyd-ru"; do
 done
 
 
+opkg install luci-i18n-base-ru 
+opkg install luci-i18n-package-manager-ru
+opkg install luci-i18n-firewall-ru
+
+
 # -----------------------------
 # Перезапуск uHTTPd
 # -----------------------------
