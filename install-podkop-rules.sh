@@ -90,29 +90,28 @@ else
     opkg install $PKG
 
 
+printf "\033[33;1mПерезагрузить роутер? (y/n) Авто-перезагрузка через %d секунд...\033[0m\n" "$COUNTDOWN"
 
+# Функция обратного отсчёта
+while [ $COUNTDOWN -gt 0 ]; do
+    printf "\rОсталось: %2d сек " $COUNTDOWN
+    COUNTDOWN=$((COUNTDOWN-1))
+    # Проверка на ввод пользователя с таймаутом 1 секунда
+    read -t 1 -n 1 answer
+    if [ ! -z "$answer" ]; then
+        case "$answer" in
+            y|Y)
+                echo -e "\n\033[32;1mПерезагрузка...\033[0m"
+                reboot
+                ;;
+            n|N)
+                echo -e "\n\033[31;1mПерезагрузка отменена.\033[0m"
+                exit 0
+                ;;
+        esac
+    fi
+done
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-printf "\033[31;1mAfter 10 second AUTOREBOOT ROUTER...\033[0m\n"
-sleep 10
+# Если пользователь не ответил за 10 секунд — перезагрузка
+echo -e "\n\033[31;1mВремя истекло. Перезагрузка...\033[0m"
 reboot
