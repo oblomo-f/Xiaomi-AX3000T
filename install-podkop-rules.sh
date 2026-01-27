@@ -85,7 +85,7 @@ if opkg list-installed | grep -q "^$PKG "; then
             ;;
     esac
 else
-    printf "\033[32;1m Пакет $PKG не установлен. Устанавливаю...\033[0m\n"
+    printf "\033[32;1mПакет %s не установлен. Устанавливаю...\033[0m\n" "$PKG"
 
     opkg install $PKG
 fi
