@@ -91,6 +91,7 @@ else
 fi
 
 
-# Если пользователь не ответил за 10 секунд — перезагрузка
-echo -e "\n\033[31;1m Перезагрузка...\033[0m"
-reboot
+
+printf "\033[31;1mAfter 10 second AUTOREBOOT ROUTER...\033[0m\n"
+sleep 10
+#reboot
