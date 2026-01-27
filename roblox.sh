@@ -21,17 +21,6 @@ else
     echo "Строка добавлена в $CONFIG_FILE"
 fi
 
-# Перезапуск nfqws
-if /etc/init.d/nfqws status > /dev/null 2>&1; then
-    /etc/init.d/nfqws restart
-    echo "Сервис nfqws перезапущен."
-else
-    echo "Сервис nfqws не найден. Проверьте установку."
-fi
-
-
-
-
 # Записываем файл
 cat << 'EOF' > "$NFQWS_FILE"
 103.140.28.0/23
