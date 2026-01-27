@@ -19,7 +19,7 @@ config settings 'settings'
         option config_path '/etc/sing-box/config.json'
         option cache_path '/tmp/sing-box/cache.db'
         option log_level 'warn'
-        option exclude_ntp '0'
+        option exclude_ntp '1'
         option shutdown_correctly '0'
         option download_lists_via_proxy_section 'main'
 
