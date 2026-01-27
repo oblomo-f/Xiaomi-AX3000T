@@ -90,5 +90,5 @@ else
 fi
 
 printf "\033[31;1mAfter 10 second AUTOREBOOT ROUTER...\033[0m\n"
-#sleep 10
-#reboot
+sleep 10
+reboot
