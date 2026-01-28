@@ -1,16 +1,5 @@
 #!/bin/sh
 
-install_awg_packages() {
-    # Получение pkgarch с наибольшим приоритетом
-    PKGARCH=$(opkg print-architecture | awk 'BEGIN {max=0} {if ($3 > max) {max = $3; arch = $2}} END {print arch}')
-
-    TARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 1)
-    SUBTARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 2)
-    VERSION=$(ubus call system board | jsonfilter -e '@.release.version')
-    PKGPOSTFIX="_v${VERSION}_${PKGARCH}_${TARGET}_${SUBTARGET}.ipk"
-    BASE_URL="https://github.com/Slava-Shchipunov/awg-openwrt/releases/download/"
-
- }
   
 manage_package() {
     local name="$1"
@@ -295,10 +284,14 @@ fi
 echo "Update list packages..."
 opkg update
 
-#checkPackageAndInstall "coreutils-base64" "1"
+model="Xiaomi Router AX3000T"
+
+
+checkPackageAndInstall "coreutils-base64" "1"
 
 #encoded_code="IyEvYmluL3NoCgojINCn0YLQtdC90LjQtSDQvNC+0LTQtdC70Lgg0LjQtyDRhNCw0LnQu9CwCm1vZGVsPSQoY2F0IC90bXAvc3lzaW5mby9tb2RlbCkKCiMg0J/RgNC+0LLQtdGA0LrQsCwg0YHQvtC00LXRgNC20LjRgiDQu9C4INC80L7QtNC10LvRjCDRgdC70L7QstC+ICJSb3V0ZXJpY2giCmlmICEgZWNobyAiJG1vZGVsIiB8IGdyZXAgLXEgIlJvdXRlcmljaCI7IHRoZW4KICAgIGVjaG8gIlRoaXMgc2NyaXB0IGZvciByb3V0ZXJzIFJvdXRlcmljaC4uLiBJZiB5b3Ugd2FudCB0byB1c2UgaXQsIHdyaXRlIHRvIHRoZSBlcCBjaGF0IFRHIEByb3V0ZXJpY2giCiAgICBleGl0IDEKZmk="
-#eval "$(echo "$encoded_code" | base64 --decode)"
+encoded_code="IyEvYmluL3NoCgojINCt0YLQviDRgdC60YDQuNC/0YIg0LTQu9GPINC/0YDQvtCy0LXRgNC60Lgg0LzQvtC00LXQu9C4Cm1vZGVsPSQoY2F0IC90bXAvc3lzaW5mby9tb2RlbCkKCiMg0J/RgNC+0LLQtdGA0Y/QtdC8LCDRj9Cy0LvRj9C10YLRgdGPINC70Lgg0LzQvtC00LXQu9GMICJSb3V0ZXIiCmlmICEgZWNobyAiJG1vZGVsIiB8IGdyZXAgLXEgIlJvdXRlciI7IHRoZW4KICAgIGVjaG8gIlRoaXMgc2NyaXB0IGZvciByb3V0ZXJzIFJvdXRlcmljaC4uLiBJZiB5b3Ugd2FudCB0byB1c2UgaXQsIHdyaXRlIHRvIHRoZSBlcCBjaGF0IFRHIEByb3V0ZXJpY2giCiAgICBleGl0IDEKZmkK"
+eval "$(echo "$encoded_code" | base64 --decode)"
 
 
 checkPackageAndInstall "jq" "1"
@@ -651,7 +644,7 @@ case $varByPass in
 esac
 
 PACKAGE="podkop"
-REQUIRED_VERSION="v0.7.*"
+REQUIRED_VERSION="v0.7.7-r1"
 
 INSTALLED_VERSION=$(opkg list-installed | grep "^$PACKAGE" | cut -d ' ' -f 3)
 if [ -n "$INSTALLED_VERSION" ] && [ "$INSTALLED_VERSION" != "$REQUIRED_VERSION" ]; then
@@ -718,5 +711,5 @@ printf "\033[32;1msh <(wget -O - https://raw.githubusercontent.com/itdoginfo/pod
 
 
 printf "\033[31;1mAfter 20 second AUTOREBOOT ROUTER...\033[0m\n"
-sleep 20
+sleep 15
 reboot
