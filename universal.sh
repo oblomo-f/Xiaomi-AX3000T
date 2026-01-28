@@ -1,6 +1,5 @@
 #!/bin/sh
 
-  
 manage_package() {
     local name="$1"
     local autostart="$2"
@@ -67,8 +66,6 @@ checkPackageAndInstall() {
         fi
     fi
 }
-
-
 
 checkAndAddDomainPermanentName()
 {
@@ -182,7 +179,6 @@ else
 	is_reconfig_podkop="n"
 fi
 
-
 #####after
 DESCRIPTION=$(ubus call system board | jsonfilter -e '@.release.description')
 VERSION=$(ubus call system board | jsonfilter -e '@.release.version')
@@ -197,16 +193,13 @@ else
 fi
 ####after
 
-
 echo "Update list packages..."
 opkg update
-
 
 checkPackageAndInstall "coreutils-base64" "1"
 
 encoded_code="IyEvYmluL3NoCgojINCt0YLQviDRgdC60YDQuNC/0YIg0LTQu9GPINC/0YDQvtCy0LXRgNC60Lgg0LzQvtC00LXQu9C4Cm1vZGVsPSQoY2F0IC90bXAvc3lzaW5mby9tb2RlbCkKCiMg0J/RgNC+0LLQtdGA0Y/QtdC8LCDRj9Cy0LvRj9C10YLRgdGPINC70Lgg0LzQvtC00LXQu9GMICJSb3V0ZXIiCmlmICEgZWNobyAiJG1vZGVsIiB8IGdyZXAgLXEgIlJvdXRlciI7IHRoZW4KICAgIGVjaG8gIlRoaXMgc2NyaXB0IGZvciByb3V0ZXJzIFJvdXRlcmljaC4uLiBJZiB5b3Ugd2FudCB0byB1c2UgaXQsIHdyaXRlIHRvIHRoZSBlcCBjaGF0IFRHIEByb3V0ZXJpY2giCiAgICBleGl0IDEKZmkK"
 eval "$(echo "$encoded_code" | base64 --decode)"
-
 
 checkPackageAndInstall "jq" "1"
 checkPackageAndInstall "curl" "1"
@@ -229,7 +222,7 @@ opkg upgrade zapret
 opkg upgrade luci-app-zapret
 manage_package "zapret" "enable" "start"
 
-#проверяем установлени ли пакет dnsmasq-full
+#проверяем установлен ли пакет dnsmasq-full
 if opkg list-installed | grep -q dnsmasq-full; then
 	echo "dnsmasq-full already installed..."
 else
@@ -240,7 +233,7 @@ else
 	[ -f /etc/config/dhcp-opkg ] && cp /etc/config/dhcp /etc/config/dhcp-old && mv /etc/config/dhcp-opkg /etc/config/dhcp
 fi
 
-#проверяем установлени ли пакет https-dns-proxy
+#проверяем установлен ли пакет https-dns-proxy
 if opkg list-installed | grep -q https-dns-proxy; then
 	echo "Delete packet https-dns-proxy..."
 	opkg remove --force-removal-of-dependent-packages "https-dns-proxy"
@@ -421,8 +414,6 @@ else
 	printf "\033[32;1mOpera proxy not work...\033[0m\n"
 	isWorkOperaProxy=0
 fi
-
-
 
 varByPass=0
 isWorkWARP=0
@@ -608,20 +599,17 @@ then
 	rm -f "/etc/crontabs/temp"
 fi
 
-
 printf  "\033[32;1mService Podkop and Sing-Box restart...\033[0m\n"
 service sing-box enable
 service sing-box restart
 service podkop enable
 service podkop restart
 
-
 printf "\033[32;1m$messageComplete\033[0m\n\n"
 
 printf "\033[32;1mОбновите PODKOP до последней версии\033[0m\n"
 printf "\033[32;1mСсылка ниже, скопируйте ее и запустите в терминале после перезагрузки роутера...\033[0m\n\n"
 printf "\033[32;1msh <(wget -O - https://raw.githubusercontent.com/itdoginfo/podkop/refs/heads/main/install.sh)\033[0m\n\n"
-
 
 printf "\033[31;1mAfter 20 second AUTOREBOOT ROUTER...\033[0m\n"
 sleep 15
