@@ -4,14 +4,14 @@
 TMPDIR="/tmp/zapret"
 mkdir -p "$TMPDIR"
 cd "$TMPDIR" || exit 1
-opkg update
-opkg install wget
 
 REPO="remittor/zapret-openwrt"
 API_URL="https://api.github.com/repos/$REPO/releases/latest"
 
 echo "Проверяем последнюю версию на GitHub..."
-LATEST_TAG=$(wget -qO- "$API_URL" | grep '"tag_name":' | head -1 | cut -d '"' -f 4)
+
+# Получаем последнюю версию (корректно на OpenWrt)
+LATEST_TAG=$(wget -qO- "$API_URL" | tr -d '\n' | sed -n 's/.*"tag_name":"\([^"]*\)".*/\1/p')
 if [ -z "$LATEST_TAG" ]; then
     echo "Ошибка: не удалось определить последнюю версию."
     exit 1
@@ -26,9 +26,9 @@ if [ "$INSTALLED_VERSION" = "$LATEST_TAG" ]; then
 fi
 
 # Скачиваем архив для aarch64_cortex-a53
-LATEST_URL=$(wget -qO- "$API_URL" | grep "browser_download_url" | grep "_aarch64_cortex-a53.zip" | cut -d '"' -f 4)
+LATEST_URL=$(wget -qO- "$API_URL" | tr -d '\n' | sed -n 's/.*"browser_download_url":"\([^"]*_aarch64_cortex-a53\.zip\)".*/\1/p')
 if [ -z "$LATEST_URL" ]; then
-    echo "Ошибка: не удалось найти ссылку на архив."
+    echo "Ошибка: не удалось найти ссылку на архив для aarch64_cortex-a53."
     exit 1
 fi
 
