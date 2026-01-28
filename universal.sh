@@ -612,6 +612,6 @@ printf "\033[32;1mОбновите PODKOP до последней версии\0
 printf "\033[32;1mСсылка ниже, скопируйте ее и запустите в терминале после перезагрузки роутера...\033[0m\n\n"
 printf "\033[32;1msh <(wget -O - https://raw.githubusercontent.com/itdoginfo/podkop/refs/heads/main/install.sh)\033[0m\n\n"
 
-printf "\033[31;1mAfter 20 second AUTOREBOOT ROUTER...\033[0m\n"
+printf "\033[31;1mAfter 15 second AUTOREBOOT ROUTER...\033[0m\n"
 sleep 15
 reboot
