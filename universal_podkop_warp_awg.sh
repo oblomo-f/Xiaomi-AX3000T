@@ -1056,6 +1056,11 @@ do
 			uci commit firewall
 		fi
 
+service firewall restart
+service network restart
+
+
+
 		# Получаем список всех зон
 		ZONES=$(uci show firewall | grep "zone$" | cut -d'=' -f1)
 		#echo $ZONES
@@ -1081,8 +1086,8 @@ do
 		fi
 		
 
-service firewall restart
-service network restart
+#service firewall restart
+#service network restart
 
 
 		if [ "$is_manual_input_parameters" = "n" ]; then
