@@ -1056,6 +1056,7 @@ do
 			uci commit firewall
 		fi
 
+
 service firewall restart
 service network restart
 
@@ -1331,16 +1332,6 @@ then
 	rm -f "/etc/crontabs/temp"
 fi
 
-#printf  "\033[32;1mRestart firewall and network...\033[0m\n"
-#service firewall restart
-#service network restart
-
-# Отключаем интерфейс
-#ifdown $INTERFACE_NAME
-# Ждем несколько секунд (по желанию)
-#sleep 2
-# Включаем интерфейс
-#ifup $INTERFACE_NAME
 
 printf  "\033[32;1mService Podkop and Sing-Box restart...\033[0m\n"
 service sing-box enable
