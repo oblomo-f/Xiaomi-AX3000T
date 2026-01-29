@@ -409,10 +409,10 @@ printf "\033[32;1mCheck opera proxy...\033[0m\n"
 service sing-box restart
 curl --proxy http://127.0.0.1:18080 ipinfo.io/ip
 if [ $? -eq 0 ]; then
-	printf "\033[32;1mOpera proxy well work...\033[0m\n"
+	printf "\n\033[32;1mOpera proxy well work...\033[0m\n"
 	isWorkOperaProxy=1
 else
-	printf "\033[32;1mOpera proxy not work...\033[0m\n"
+	printf "\n\033[32;1mOpera proxy not work...\033[0m\n"
 	isWorkOperaProxy=0
 fi
 
@@ -476,7 +476,7 @@ case $varByPass in
 	manage_package "youtubeUnblock" "disable" "stop"
 	service zapret restart
 	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 1: AWG WARP + zapret + Opera Proxy...Configured completed..."
+	messageComplete="Method 1: AWG WARP + zapret + Opera Proxy...Configured completed..."
 	;;
 2)
 	nameFileReplacePodkop="podkopNew"
@@ -485,7 +485,7 @@ case $varByPass in
 	manage_package "ruantiblock" "disable" "stop"
 	manage_package "zapret" "disable" "stop"
 	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 2: AWG WARP + Opera Proxy...Configured completed..."
+	messageComplete="Method 2: AWG WARP + Opera Proxy...Configured completed..."
 	;;
 3)
 	nameFileReplacePodkop="podkopNewSecond"
@@ -496,7 +496,7 @@ case $varByPass in
 	chmod +x "/opt/zapret/init.d/openwrt/custom.d/50-discord-media"
 	service zapret restart
 	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 3: zapret + Opera Proxy...Configured completed..."
+	messageComplete="Method 3: zapret + Opera Proxy...Configured completed..."
 	;;
 4)
 	nameFileReplacePodkop="podkopNewSecondYoutube"
@@ -505,7 +505,7 @@ case $varByPass in
 	manage_package "ruantiblock" "disable" "stop"
 	manage_package "zapret" "disable" "stop"
 	deleteByPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 4: Only Opera Proxy...Configured completed..."
+	messageComplete="Method 4: Only Opera Proxy...Configured completed..."
 	;;
 5)
 	nameFileReplacePodkop="podkopNewSecondYoutube"
@@ -518,7 +518,7 @@ case $varByPass in
 	chmod +x "/opt/zapret/init.d/openwrt/custom.d/50-discord-media"
 	service zapret restart
 	byPassGeoBlockComssDNS
-	printf "\033[32;1mByPass block for Method 5: zapret + ComssDNS for GeoBlock...Configured completed...\033[0m\n"
+	printf "\033[32;1mMethod 5: zapret + ComssDNS for GeoBlock...Configured completed...\033[0m\n"
 	exit 1
 	;;
 6)
@@ -528,7 +528,7 @@ case $varByPass in
 	manage_package "ruantiblock" "disable" "stop"
 	manage_package "zapret" "disable" "stop"
 	byPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 6: AWG WARP + ComssDNS for GeoBlock...Configured completed..."
+	messageComplete="Method 6: AWG WARP + ComssDNS for GeoBlock...Configured completed..."
 	;;
 7)
 	nameFileReplacePodkop="podkopNewWARPNoYoutube"
@@ -539,7 +539,7 @@ case $varByPass in
 	chmod +x "/opt/zapret/init.d/openwrt/custom.d/50-discord-media"
 	service zapret restart
 	byPassGeoBlockComssDNS
-	messageComplete="ByPass block for Method 7: AWG WARP + zapret + ComssDNS for GeoBlock...Configured completed..."
+	messageComplete="Method 7: AWG WARP + zapret + ComssDNS for GeoBlock...Configured completed..."
 	;;
 8)
 	printf "\033[32;1mTry custom settings router to bypass the locks... Recomendation buy 'VPS' and up 'vless'\033[0m\n"
