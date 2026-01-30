@@ -115,6 +115,18 @@ opkg install luci-i18n-base-ru
 opkg install luci-i18n-package-manager-ru
 opkg install luci-i18n-firewall-ru
 
+# -----------------------------
+echo "Установка Часового пояса: Europe/Moscow."
+uci set system.@system[0].timezone="Europe/Moscow"
+uci set system.@system[0].zonename="Europe/Moscow"
+uci commit system
+/etc/init.d/system reload
+echo "Часовой пояс установлен: Europe/Moscow."
+# -----------------------------
+
+
+
+
 
 # -----------------------------
 # Перезапуск uHTTPd
