@@ -5,6 +5,7 @@ CONFIG="/etc/opkg/distfeeds.conf"
 KEYDIR="/etc/opkg/keys"
 KEYFILE="$KEYDIR/2e724001fb65916f"
 
+
 THEME_PACKAGE="luci-theme-routerich"
 FILEMANAGER_PACKAGE="luci-app-filemanager"
 FILEMANAGER_LANG="luci-i18n-filemanager-ru"
@@ -14,8 +15,7 @@ FILEMANAGER_LANG="luci-i18n-filemanager-ru"
 # -----------------------------
 REPOS=$(cat <<EOF
 src/gz routerich_core https://github.com/routerich/packages.routerich/raw/24.10.5/core
-src/gz openwrt_base https://downloads.openwrt.org/releases/24.10.5/packages/aarch64_cortex-a53/base
-src/gz openwrt_kmods https://downloads.openwrt.org/releases/24.10.5/targets/mediatek/filogic/kmods/6.6.110-1-6a9e125268c43e0bae8cecb014c8ab03
+src/gz routerich_base https://github.com/routerich/packages.routerich/raw/24.10.5/base
 src/gz openwrt_luci https://downloads.openwrt.org/releases/24.10.5/packages/aarch64_cortex-a53/luci
 src/gz openwrt_packages https://downloads.openwrt.org/releases/24.10.5/packages/aarch64_cortex-a53/packages
 src/gz openwrt_routing https://downloads.openwrt.org/releases/24.10.5/packages/aarch64_cortex-a53/routing
@@ -43,6 +43,7 @@ echo "Новые репозитории добавлены в $CONFIG"
 # -----------------------------
 KEY_CONTENT="untrusted comment: Public usign key for 24.10 release builds
 RWQuckAB+2WRb9rwzhWarTedFmsvy8y5kxAS3A0KXe3yUou9V/Nfbqty"
+
 
 mkdir -p "$KEYDIR"
 
