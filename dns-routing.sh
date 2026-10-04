@@ -1,15 +1,10 @@
- 
+
+    
+  
 #!/bin/sh
 
 # DNS routing / GeoBlock bypass
 # Xiaomi AX3000T / RouteRich / OpenWrt
-#
-# Install:
-#   wget -qO- https://raw.githubusercontent.com/oblomo-f/Xiaomi-AX3000T/refs/heads/main/dns-routing.sh | sh
-#
-# Remove:
-#   wget -qO- https://raw.githubusercontent.com/oblomo-f/Xiaomi-AX3000T/refs/heads/main/dns-routing.sh | sh -s -- remove
-#
 
 DNS_CONFIG="cfg01411c"
 
@@ -47,7 +42,6 @@ configureDns()
     addServer '127.0.0.1#5054'
     addServer '127.0.0.1#5055'
     addServer '127.0.0.1#5056'
-
     addServer '/*.chatgpt.com/127.0.0.1#5056'
     addServer '/*.oaistatic.com/127.0.0.1#5056'
     addServer '/*.oaiusercontent.com/127.0.0.1#5056'
@@ -99,8 +93,6 @@ configureDns()
     addServer '/*.gstatic.com/127.0.0.1#5056'
     addServer '/*.brawlstarsgame.com/127.0.0.1#5056'
 
-    echo "Configure ChatGPT..."
-
     checkAndAddDomainPermanentName "chatgpt.com" "83.220.169.155"
     checkAndAddDomainPermanentName "openai.com" "83.220.169.155"
     checkAndAddDomainPermanentName "webrtc.chatgpt.com" "83.220.169.155"
@@ -115,16 +107,25 @@ configureDns()
     echo "DNS routing configured."
 }
 
+removeDomain()
+{
+    local name="$1"
+    local section
+
+    section="$(uci show dhcp 2>/dev/null | sed -n "s/^dhcp\.\([^=]*\)=domain$/\1/p")"
+
+    for section in $section
+    do
+        if [ "$(uci -q get "dhcp.$section.name" 2>/dev/null)" = "$name" ]
+        then
+            uci -q delete "dhcp.$section"
+        fi
+    done
+}
+
 removeDns()
 {
     echo "Remove DNS routing..."
 
-    uci -q delete "dhcp.$DNS_CONFIG.strictorder"
-    uci -q delete "dhcp.$DNS_CONFIG.filter_aaaa"
-
-    # Remove only the entries installed by this script.
-    local tmp
-    tmp="$(uci -q get "dhcp.$DNS_CONFIG.server" 2>/dev/null || true)"
-
-    if [ -n "$tmp" ]
+    # Remove only entries installed by this script.
 
