@@ -1,91 +1,129 @@
-
-    
-  
 #!/bin/sh
 
-# DNS Routing installer for OpenWrt / RouteRich
+# DNS routing / GeoBlock bypass
+# Xiaomi AX3000T / RouteRich / OpenWrt
+#
+# Install:
+#   wget -qO- https://raw.githubusercontent.com/oblomo-f/Xiaomi-AX3000T/refs/heads/main/dns-routing.sh | sh
+#
+# Remove:
+#   wget -qO- https://raw.githubusercontent.com/oblomo-f/Xiaomi-AX3000T/refs/heads/main/dns-routing.sh | sh -s -- remove
+#
 
-set -eu
+DNS_CONFIG="cfg01411c"
 
-SECTION="$(uci show dhcp 2>/dev/null | sed -n 's/^dhcp\.\([^.=]*\)=dnsmasq$/\1/p' | head -n 1)"
-if [ -z "$SECTION" ]; then
-    echo "ERROR: dnsmasq section not found." >&2
-    exit 1
-fi
+addServer()
+{
+    local value="$1"
 
-# Check an item in a UCI list without creating duplicates.
-has_server() {
-    value="$1"
-    uci -q get "dhcp.$SECTION.server" 2>/dev/null | tr " " "\n" | grep -F -x -q -- "$value"
-}
-
-add_server() {
-    value="$1"
-    if ! has_server "$value"; then
-        uci add_list "dhcp.$SECTION.server=$value"
+    if ! uci -q get "dhcp.$DNS_CONFIG.server" 2>/dev/null | tr ' ' '\n' | grep -F -x -q "$value"
+    then
+        uci add_list "dhcp.$DNS_CONFIG.server=$value"
     fi
 }
 
-uci set "dhcp.$SECTION.strictorder=1"
-uci set "dhcp.$SECTION.filter_aaaa=1"
+checkAndAddDomainPermanentName()
+{
+    local name="$1"
+    local ip="$2"
 
-add_server '127.0.0.1#5053'
-add_server '127.0.0.1#5054'
-add_server '127.0.0.1#5055'
-add_server '127.0.0.1#5056'
-add_server '/*.chatgpt.com/127.0.0.1#5056'
-add_server '/*.oaistatic.com/127.0.0.1#5056'
-add_server '/*.oaiusercontent.com/127.0.0.1#5056'
-add_server '/*.openai.com/127.0.0.1#5056'
-add_server '/*.microsoft.com/127.0.0.1#5056'
-add_server '/*.windowsupdate.com/127.0.0.1#5056'
-add_server '/*.bing.com/127.0.0.1#5056'
-add_server '/*.supercell.com/127.0.0.1#5056'
-add_server '/*.seeurlpcl.com/127.0.0.1#5056'
-add_server '/*.supercellid.com/127.0.0.1#5056'
-add_server '/*.supercellgames.com/127.0.0.1#5056'
-add_server '/*.clashroyale.com/127.0.0.1#5056'
-add_server '/*.brawlstars.com/127.0.0.1#5056'
-add_server '/*.clash.com/127.0.0.1#5056'
-add_server '/*.clashofclans.com/127.0.0.1#5056'
-add_server '/*.x.ai/127.0.0.1#5056'
-add_server '/*.grok.com/127.0.0.1#5056'
-add_server '/*.github.com/127.0.0.1#5056'
-add_server '/*.forzamotorsport.net/127.0.0.1#5056'
-add_server '/*.forzaracingchampionship.com/127.0.0.1#5056'
-add_server '/*.forzarc.com/127.0.0.1#5056'
-add_server '/*.gamepass.com/127.0.0.1#5056'
-add_server '/*.orithegame.com/127.0.0.1#5056'
-add_server '/*.renovacionxboxlive.com/127.0.0.1#5056'
-add_server '/*.tellmewhygame.com/127.0.0.1#5056'
-add_server '/*.xbox.co/127.0.0.1#5056'
-add_server '/*.xbox.com/127.0.0.1#5056'
-add_server '/*.xbox.eu/127.0.0.1#5056'
-add_server '/*.xbox.org/127.0.0.1#5056'
-add_server '/*.xbox360.co/127.0.0.1#5056'
-add_server '/*.xbox360.com/127.0.0.1#5056'
-add_server '/*.xbox360.eu/127.0.0.1#5056'
-add_server '/*.xbox360.org/127.0.0.1#5056'
-add_server '/*.xboxab.com/127.0.0.1#5056'
-add_server '/*.xboxgamepass.com/127.0.0.1#5056'
-add_server '/*.xboxgamestudios.com/127.0.0.1#5056'
-add_server '/*.xboxlive.cn/127.0.0.1#5056'
-add_server '/*.xboxlive.com/127.0.0.1#5056'
-add_server '/*.xboxone.co/127.0.0.1#5056'
-add_server '/*.xboxone.com/127.0.0.1#5056'
-add_server '/*.xboxone.eu/127.0.0.1#5056'
-add_server '/*.xboxplayanywhere.com/127.0.0.1#5056'
-add_server '/*.xboxservices.com/127.0.0.1#5056'
-add_server '/*.xboxstudios.com/127.0.0.1#5056'
-add_server '/*.xbx.lv/127.0.0.1#5056'
-add_server '/*.sentry.io/127.0.0.1#5056'
-add_server '/*.usercentrics.eu/127.0.0.1#5056'
-add_server '/*.recaptcha.net/127.0.0.1#5056'
-add_server '/*.gstatic.com/127.0.0.1#5056'
-add_server '/*.brawlstarsgame.com/127.0.0.1#5056'
+    if ! uci show dhcp 2>/dev/null | grep -F -q "name='$name'"
+    then
+        uci add dhcp domain
+        uci set "dhcp.@domain[-1].name=$name"
+        uci set "dhcp.@domain[-1].ip=$ip"
+    fi
+}
 
-uci commit dhcp
-/etc/init.d/dnsmasq restart >/dev/null 2>&1 || true
+configureDns()
+{
+    echo "Configure DNS..."
 
-echo "DNS routing installed successfully."
+    uci set "dhcp.$DNS_CONFIG.strictorder=1"
+    uci set "dhcp.$DNS_CONFIG.filter_aaaa=1"
+
+    addServer '127.0.0.1#5053'
+    addServer '127.0.0.1#5054'
+    addServer '127.0.0.1#5055'
+    addServer '127.0.0.1#5056'
+
+    addServer '/*.chatgpt.com/127.0.0.1#5056'
+    addServer '/*.oaistatic.com/127.0.0.1#5056'
+    addServer '/*.oaiusercontent.com/127.0.0.1#5056'
+    addServer '/*.openai.com/127.0.0.1#5056'
+    addServer '/*.microsoft.com/127.0.0.1#5056'
+    addServer '/*.windowsupdate.com/127.0.0.1#5056'
+    addServer '/*.bing.com/127.0.0.1#5056'
+    addServer '/*.supercell.com/127.0.0.1#5056'
+    addServer '/*.seeurlpcl.com/127.0.0.1#5056'
+    addServer '/*.supercellid.com/127.0.0.1#5056'
+    addServer '/*.supercellgames.com/127.0.0.1#5056'
+    addServer '/*.clashroyale.com/127.0.0.1#5056'
+    addServer '/*.brawlstars.com/127.0.0.1#5056'
+    addServer '/*.clash.com/127.0.0.1#5056'
+    addServer '/*.clashofclans.com/127.0.0.1#5056'
+    addServer '/*.x.ai/127.0.0.1#5056'
+    addServer '/*.grok.com/127.0.0.1#5056'
+    addServer '/*.github.com/127.0.0.1#5056'
+    addServer '/*.forzamotorsport.net/127.0.0.1#5056'
+    addServer '/*.forzaracingchampionship.com/127.0.0.1#5056'
+    addServer '/*.forzarc.com/127.0.0.1#5056'
+    addServer '/*.gamepass.com/127.0.0.1#5056'
+    addServer '/*.orithegame.com/127.0.0.1#5056'
+    addServer '/*.renovacionxboxlive.com/127.0.0.1#5056'
+    addServer '/*.tellmewhygame.com/127.0.0.1#5056'
+    addServer '/*.xbox.co/127.0.0.1#5056'
+    addServer '/*.xbox.com/127.0.0.1#5056'
+    addServer '/*.xbox.eu/127.0.0.1#5056'
+    addServer '/*.xbox.org/127.0.0.1#5056'
+    addServer '/*.xbox360.co/127.0.0.1#5056'
+    addServer '/*.xbox360.com/127.0.0.1#5056'
+    addServer '/*.xbox360.eu/127.0.0.1#5056'
+    addServer '/*.xbox360.org/127.0.0.1#5056'
+    addServer '/*.xboxab.com/127.0.0.1#5056'
+    addServer '/*.xboxgamepass.com/127.0.0.1#5056'
+    addServer '/*.xboxgamestudios.com/127.0.0.1#5056'
+    addServer '/*.xboxlive.cn/127.0.0.1#5056'
+    addServer '/*.xboxlive.com/127.0.0.1#5056'
+    addServer '/*.xboxone.co/127.0.0.1#5056'
+    addServer '/*.xboxone.com/127.0.0.1#5056'
+    addServer '/*.xboxone.eu/127.0.0.1#5056'
+    addServer '/*.xboxplayanywhere.com/127.0.0.1#5056'
+    addServer '/*.xboxservices.com/127.0.0.1#5056'
+    addServer '/*.xboxstudios.com/127.0.0.1#5056'
+    addServer '/*.xbx.lv/127.0.0.1#5056'
+    addServer '/*.sentry.io/127.0.0.1#5056'
+    addServer '/*.usercentrics.eu/127.0.0.1#5056'
+    addServer '/*.recaptcha.net/127.0.0.1#5056'
+    addServer '/*.gstatic.com/127.0.0.1#5056'
+    addServer '/*.brawlstarsgame.com/127.0.0.1#5056'
+
+    echo "Configure ChatGPT..."
+
+    checkAndAddDomainPermanentName "chatgpt.com" "83.220.169.155"
+    checkAndAddDomainPermanentName "openai.com" "83.220.169.155"
+    checkAndAddDomainPermanentName "webrtc.chatgpt.com" "83.220.169.155"
+    checkAndAddDomainPermanentName "ios.chat.openai.com" "83.220.169.155"
+    checkAndAddDomainPermanentName "searchgpt.com" "83.220.169.155"
+
+    uci commit dhcp
+
+    service dnsmasq restart
+    service odhcpd restart
+
+    echo "DNS routing configured."
+}
+
+removeDns()
+{
+    echo "Remove DNS routing..."
+
+    uci -q delete "dhcp.$DNS_CONFIG.strictorder"
+    uci -q delete "dhcp.$DNS_CONFIG.filter_aaaa"
+
+    # Remove only the entries installed by this script.
+    local tmp
+    tmp="$(uci -q get "dhcp.$DNS_CONFIG.server" 2>/dev/null || true)"
+
+    if [ -n "$tmp" ]
 
