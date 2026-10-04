@@ -2,40 +2,37 @@
     
   
 #!/bin/sh
-# DNS routing installer for OpenWrt / RouteRich
-# Adds local DNS servers and routes selected domains to 127.0.0.1#5056.
+
+# DNS Routing installer for OpenWrt / RouteRich
 
 set -eu
 
 SECTION="$(uci show dhcp 2>/dev/null | sed -n 's/^dhcp\.\([^.=]*\)=dnsmasq$/\1/p' | head -n 1)"
 if [ -z "$SECTION" ]; then
-    echo "ERROR: dnsmasq section not found in UCI dhcp config." >&2
+    echo "ERROR: dnsmasq section not found." >&2
     exit 1
 fi
 
-echo "Using dnsmasq section: dhcp.$SECTION"
+# Check an item in a UCI list without creating duplicates.
+has_server() {
+    value="$1"
+    uci -q get "dhcp.$SECTION.server" 2>/dev/null | tr " " "\n" | grep -F -x -q -- "$value"
+}
+
+add_server() {
+    value="$1"
+    if ! has_server "$value"; then
+        uci add_list "dhcp.$SECTION.server=$value"
+    fi
+}
 
 uci set "dhcp.$SECTION.strictorder=1"
 uci set "dhcp.$SECTION.filter_aaaa=1"
 
-add_server() {
-    value="$1"
-    current="$(uci -q get "dhcp.$SECTION.server" 2>/dev/null || true)"
-    if printf "%s\n" "$current" | grep -F -x -q -- "$value"; then
-        echo "Already present: $value"
-    else
-        uci add_list "dhcp.$SECTION.server=$value"
-        echo "Added: $value"
-    fi
-}
-
-echo "Adding DNS servers..."
 add_server '127.0.0.1#5053'
 add_server '127.0.0.1#5054'
 add_server '127.0.0.1#5055'
 add_server '127.0.0.1#5056'
-
-echo "Adding domain routing rules..."
 add_server '/*.chatgpt.com/127.0.0.1#5056'
 add_server '/*.oaistatic.com/127.0.0.1#5056'
 add_server '/*.oaiusercontent.com/127.0.0.1#5056'
@@ -88,11 +85,7 @@ add_server '/*.gstatic.com/127.0.0.1#5056'
 add_server '/*.brawlstarsgame.com/127.0.0.1#5056'
 
 uci commit dhcp
+/etc/init.d/dnsmasq restart >/dev/null 2>&1 || true
 
-echo "Restarting dnsmasq..."
-/etc/init.d/dnsmasq restart
-
-echo "Done."
-echo "DNS configuration:"
-uci show "dhcp.$SECTION" | grep -E "strictorder|filter_aaaa|server" || true
+echo "DNS routing installed successfully."
 
